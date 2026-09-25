@@ -1,0 +1,17 @@
+---
+- name: Project 04 - Setup Web Server
+  hosts: web
+  tasks:
+    - name: Create web dir
+      file:
+        path: /tmp/www
+        state: directory
+        mode: '0755'
+    - name: Copy custom index
+      copy:
+        src: ../02-docker-web/index.html
+        dest: /tmp/www/index.html
+        mode: '0644'
+    - name: Show result
+      debug:
+        msg: "File deployed to /tmp/www/index.html"
