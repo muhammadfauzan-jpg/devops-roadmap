@@ -1,0 +1,27 @@
+name: 03-cicd-pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t devops-web ./02-docker-web
+
+      - name: Test image runs
+        run: |
+          docker run -d -p 8080:80 --name test-web devops-web
+          sleep 5
+          curl -f http://localhost:8080 || exit 1
+          docker rm -f test-web
+
+      - name: Success
+        run: echo "Project 03 - Build & Test OK - Fauzan"
